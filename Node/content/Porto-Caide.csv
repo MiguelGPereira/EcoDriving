@@ -1,0 +1,23 @@
+#RouteOrder;StationId;ArrivalTime;DepartureTime
+Porto Sao Bento;00:00:00;00:40:00
+Porto Campanha;00:44:00;00:45:00
+Contumil;00:48:00;00:48:30
+Rio Tinto;00:50:30;00:51:00
+Aguas Santas;00:53:00;00:53:30
+Ermesinde;00:56:00;00:57:00
+Cabeda;00:59:30;01:00:00
+Suzao;01:03:00;01:03:30
+Valongo;01:05:30;01:06:00
+S. Martinho do Campo;01:08:30;01:09:00
+Terronhas;01:12:00;01:12:30
+Trancoso;01:14:30;01:15:00
+Recarei-Sobreira;01:17:00;01:17:30
+Parada;01:20:00;01:20:30
+Cete;01:22:30;01:23:00
+Irivo;01:25:00;01:25:30
+Oleiros;01:27:00;01:27:30
+Paredes;01:29:30;01:30:00
+Penafiel;01:32:30;01:33:00
+Bustelo;01:35:30;01:36:00
+Meinedo;01:38:30;01:39:00
+Caide;01:43:00;00:00:00
