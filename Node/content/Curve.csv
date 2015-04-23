@@ -1,4 +1,4 @@
-#StartPoint(km);EndPoint(km);Curve(m)
+StartPoint(km);EndPoint(km);Curve(m)
 4.45;4.96;787
 5.14;5.54;730
 6.29;6.56;1639

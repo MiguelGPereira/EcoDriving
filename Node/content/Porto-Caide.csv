@@ -1,4 +1,4 @@
-#RouteOrder;StationId;ArrivalTime;DepartureTime
+RouteOrder;StationId;ArrivalTime;DepartureTime
 Porto Sao Bento;00:00:00;00:40:00
 Porto Campanha;00:44:00;00:45:00
 Contumil;00:48:00;00:48:30

@@ -1,4 +1,4 @@
-#Start Point(km);End Point(km);Speed Limit(km/h)
+Start Point(km);End Point(km);Speed Limit(km/h)
 -2.52;-1.9945;30
 -1.9945;0.0185;60
 0.0185;0.384;50

@@ -1,4 +1,4 @@
-#Start Point(km);End Point(km);Gradient(?);Elevation(m)
+Start Point(km);End Point(km);Gradient(?);Elevation(m)
 -2.618;-1.835;-11;94.46391693
 -1.835;-1.163;-12;85.85091693
 -1.163;-0.859;0;77.78691693
