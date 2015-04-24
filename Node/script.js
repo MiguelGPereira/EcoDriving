@@ -34,8 +34,8 @@ readAllFiles(function(loadedData) {
 
 function getTimeDistBetweenStations() {
   //1+1 station 0 doesnt matter
+  console.log(loadedData.Station[1][0]);
   for (var i = 1 + 1; i < loadedData.Station.length; i++) {
-    console.log(loadedData.Station[i][0]);
     Start = {
       time: fromTimeToHour(loadedData.PortoCaide[i - 1][2]),
       place: loadedData.Station[i - 1][2]
@@ -47,7 +47,8 @@ function getTimeDistBetweenStations() {
     TravelTime = End.time - Start.time;
     TravelDist = End.place - Start.place;
     Velocity = TravelDist / (TravelTime / 3600);
-    console.log("\tTravelTime: " + TravelTime + "\tTravelDist: " + TravelDist + "\tVelocity: " + Velocity);
+    console.log("\tTravelTime: " + TravelTime + "s \tTravelDist: " + TravelDist + "km \tVelocity: " + Velocity + " km/h");
+    console.log(loadedData.Station[i][0]);
   }
 }
 
