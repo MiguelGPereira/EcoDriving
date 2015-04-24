@@ -25,10 +25,37 @@ var files = [{
 var loadedData = {};
 
 readAllFiles(function(loadedData) {
+  //console.log(fromTimeToHour("00:30:30"));
   //console.log(loadedData);
-  console.log(getMaxVelocity(16));
-  console.log(getCurve(16));
+  //console.log(getMaxVelocity(16));
+  //console.log(getCurve(16));
+  getTimeDistBetweenStations();
 });
+
+function getTimeDistBetweenStations() {
+  //1+1 station 0 doesnt matter
+  for (var i = 1 + 1; i < loadedData.Station.length; i++) {
+    console.log(loadedData.Station[i][0]);
+    Start = {
+      time: fromTimeToHour(loadedData.PortoCaide[i - 1][2]),
+      place: loadedData.Station[i - 1][2]
+    };
+    End = {
+      time: fromTimeToHour(loadedData.PortoCaide[i][1]),
+      place: loadedData.Station[i][2]
+    };
+    TravelTime = End.time - Start.time;
+    TravelDist = End.place - Start.place;
+    Velocity = TravelDist / (TravelTime / 3600);
+    console.log("\tTravelTime: " + TravelTime + "\tTravelDist: " + TravelDist + "\tVelocity: " + Velocity);
+  }
+}
+
+function fromTimeToHour(time) {
+  var splited = time.split(':');
+  return (parseFloat(splited[0] * 3600) + parseFloat(splited[1] * 60) + parseFloat(splited[2]));
+
+}
 
 function getMaxVelocity(PK) {
   for (var i = 1; i < loadedData.SpeedLimit.length; i++) {

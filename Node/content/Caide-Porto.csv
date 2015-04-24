@@ -1,23 +1,23 @@
-Station;DepartureTime;ArrivalTime
-Caide;00:00:00;04:38:00
-Meinedo;04:41:30;04:42:00
-Bustelo;04:44:30;04:45:00
-Penafiel;04:47:30;04:48:00
-Paredes;04:50:30;04:51:00
-Oleiros;04:53:00;04:53:30
-Irivo;04:55:30;04:56:00
-Cete;04:58:00;04:58:30
-Parada;05:00:30;05:01:00
-Recarei-Sobreira;05:03:30;05:04:00
-Trancoso;05:06:00;05:06:30
-Terronhas;05:08:30;05:09:00
-S. Martinho do Campo;05:11:30;05:12:00
-Valongo;05:14:30;05:15:00
-Suzao;05:17:00;05:17:30
-Cabeda;05:20:30;05:21:00
-Ermesinde;05:23:30;05:24:30
-Palmilheira;05:26:30;05:27:00
-Rio Tinto;05:29:00;05:29:30
-Contumil;05:31:30;05:32:00
-Porto Campanha;05:35:00;05:36:00
-Porto Sao Bento;05:40:00;00:00:00
+Station;ArrivalTime;DepartureTime
+Caide;00:00:00;00:00:00
+Meinedo;00:03:30;00:04:00
+Bustelo;00:05:30;00:06:00
+Penafiel;00:07:30;00:08:00
+Paredes;00:10:30;00:11:00
+Oleiros;00:13:00;04:13:30
+Irivo;00:15:30;00:16:00
+Cete;00:18:00;00:18:30
+Parada;00:20:30;00:21:00
+Recarei-Sobreira;00:23:30;00:24:00
+Trancoso;00:26:00;00:26:30
+Terronhas;00:28:30;00:29:00
+S. Martinho do Campo;00:31:30;00:32:00
+Valongo;00:34:30;00:35:00
+Suzao;00:37:00;00:37:30
+Cabeda;00:40:30;00:41:00
+Ermesinde;00:43:30;00:44:30
+Palmilheira;00:46:30;00:47:00
+Rio Tinto;00:49:00;00:49:30
+Contumil;00:51:30;00:52:00
+Porto Campanha;00:55:00;00:56:00
+Porto Sao Bento;01:00:00;00:00:00

@@ -1,23 +1,23 @@
 RouteOrder;StationId;ArrivalTime;DepartureTime
-Porto Sao Bento;00:00:00;00:40:00
-Porto Campanha;00:44:00;00:45:00
-Contumil;00:48:00;00:48:30
-Rio Tinto;00:50:30;00:51:00
-Aguas Santas;00:53:00;00:53:30
-Ermesinde;00:56:00;00:57:00
-Cabeda;00:59:30;01:00:00
-Suzao;01:03:00;01:03:30
-Valongo;01:05:30;01:06:00
-S. Martinho do Campo;01:08:30;01:09:00
-Terronhas;01:12:00;01:12:30
-Trancoso;01:14:30;01:15:00
-Recarei-Sobreira;01:17:00;01:17:30
-Parada;01:20:00;01:20:30
-Cete;01:22:30;01:23:00
-Irivo;01:25:00;01:25:30
-Oleiros;01:27:00;01:27:30
-Paredes;01:29:30;01:30:00
-Penafiel;01:32:30;01:33:00
-Bustelo;01:35:30;01:36:00
-Meinedo;01:38:30;01:39:00
-Caide;01:43:00;00:00:00
+Porto Sao Bento;00:00:00;00:00:00
+Porto Campanha;00:04:00;00:05:00
+Contumil;00:08:00;00:08:30
+Rio Tinto;00:10:30;00:11:00
+Aguas Santas;00:13:00;00:13:30
+Ermesinde;00:16:00;00:17:00
+Cabeda;00:19:30;00:20:00
+Suzao;00:23:00;00:23:30
+Valongo;00:25:30;00:26:00
+S. Martinho do Campo;0:28:30;00:29:00
+Terronhas;00:32:00;00:32:30
+Trancoso;00:34:30;00:35:00
+Recarei-Sobreira;00:37:00;00:37:30
+Parada;00:40:00;00:40:30
+Cete;00:42:30;00:43:00
+Irivo;00:45:00;00:45:30
+Oleiros;00:47:00;00:47:30
+Paredes;00:49:30;00:50:00
+Penafiel;00:52:30;00:53:00
+Bustelo;00:55:30;00:56:00
+Meinedo;00:58:30;00:59:00
+Caide;01:03:00;00:00:00
