@@ -22,6 +22,12 @@ var files = [{
   path: "content/Gradient.csv"
 }];
 
+var train = {
+  acceleration: 1, //1m/s^2 = 12960 km/h^2
+  traction_effort: 185,
+  traction_effort_max: 38
+};
+
 var loadedData = {};
 
 readAllFiles(function(loadedData) {
@@ -29,27 +35,53 @@ readAllFiles(function(loadedData) {
   //console.log(loadedData);
   //console.log(getMaxVelocity(16));
   //console.log(getCurve(16));
-  getTimeDistBetweenStations();
+  getTimeDistBetweenStations("PortoCaide");
+  //getTimeDistBetweenStations("CaidePorto");
+  //
 });
 
-function getTimeDistBetweenStations() {
+function getTimeDistBetweenStations(direction) {
+
   //1+1 station 0 doesnt matter
   console.log(loadedData.Station[1][0]);
+
   for (var i = 1 + 1; i < loadedData.Station.length; i++) {
     Start = {
-      time: fromTimeToHour(loadedData.PortoCaide[i - 1][2]),
+      time: fromTimeToHour(loadedData[direction][i - 1][2]),
       place: loadedData.Station[i - 1][2]
     };
     End = {
-      time: fromTimeToHour(loadedData.PortoCaide[i][1]),
-      place: loadedData.Station[i][2]
+      time: fromTimeToHour(loadedData[direction][i][1]),
+      place: loadedData.Station[i][2],
+      stop: loadedData.Station[i][1]
     };
-    TravelTime = End.time - Start.time;
+    TravelTime = Math.abs(End.time - Start.time);
     TravelDist = End.place - Start.place;
     Velocity = TravelDist / (TravelTime / 3600);
     console.log("\tTravelTime: " + TravelTime + "s \tTravelDist: " + TravelDist + "km \tVelocity: " + Velocity + " km/h");
+    //stream.write("" + TravelTime + ";" + TravelDist + "\n");
+    getMaxVelocity(End.place, function(max) {
+      velocityAcelerationTime(TravelTime, TravelDist * 1000, max * 1000, function(v) {
+        console.log("\tRec:" + v * 3.6 + " \tmax:" + max);
+      });
+    });
     console.log(loadedData.Station[i][0]);
   }
+}
+
+function velocityAcelerationTime(time, dist, maximum, callback) {
+  var t = 1;
+  for (t = 1; t <= time; t++) {
+    dAcc = 1 / 2 * train.acceleration * t * t;
+    vel = t * train.acceleration;
+    currentTime = time - t;
+    constDist = currentTime * vel;
+    if (constDist + dAcc >= dist) {
+      callback(vel);
+      break;
+    }
+  }
+
 }
 
 function fromTimeToHour(time) {
@@ -58,13 +90,16 @@ function fromTimeToHour(time) {
 
 }
 
-function getMaxVelocity(PK) {
+function getMaxVelocity(PK, callback) {
+  var limit = 0;
   for (var i = 1; i < loadedData.SpeedLimit.length; i++) {
     if (loadedData.SpeedLimit[i][0] <= PK && loadedData.SpeedLimit[i][1] >= PK) {
-      return loadedData.SpeedLimit[i][2];
+      limit = loadedData.SpeedLimit[i][2];
+      callback(limit);
+      break;
     }
   }
-  return 0;
+
 }
 
 function getCurve(PK) {
