@@ -1,0 +1,44 @@
+Time in seconds, distance in km and vel.media in km/h
+Porto Sao Bento
+TravelTime: 240;TravelDist: 2.618;Vel.Media: 39.269999999999996
+Porto Campanha
+TravelTime: 180;TravelDist: 2.443;Vel.Media: 48.86
+Contumil
+TravelTime: 120;TravelDist: 2.3062799999999997;Vel.Media: 69.18839999999999
+Rio Tinto
+TravelTime: 120;TravelDist: 1.7877200000000002;Vel.Media: 53.631600000000006
+Aguas Santas
+TravelTime: 150;TravelDist: 1.8918500000000007;Vel.Media: 45.40440000000002
+Ermesinde
+TravelTime: 150;TravelDist: 2.026349999999999;Vel.Media: 48.632399999999976
+Cabeda
+TravelTime: 180;TravelDist: 3.9046000000000003;Vel.Media: 78.092
+Suzao
+TravelTime: 120;TravelDist: 1.6059;Vel.Media: 48.17700000000001
+Valongo
+TravelTime: 150;TravelDist: 2.6567999999999987;Vel.Media: 63.76319999999997
+S. Martinho do Campo
+TravelTime: 180;TravelDist: 3.092500000000001;Vel.Media: 61.85000000000002
+Terronhas
+TravelTime: 120;TravelDist: 1.6750000000000007;Vel.Media: 50.25000000000002
+Trancoso
+TravelTime: 120;TravelDist: 1.9421;Vel.Media: 58.263
+Recarei-Sobreira
+TravelTime: 150;TravelDist: 3.0379000000000005;Vel.Media: 72.90960000000001
+Parada
+TravelTime: 120;TravelDist: 1.8000000000000007;Vel.Media: 54.00000000000002
+Cete
+TravelTime: 120;TravelDist: 1.7709999999999972;Vel.Media: 53.12999999999992
+Irivo
+TravelTime: 90;TravelDist: 1.113000000000003;Vel.Media: 44.520000000000124
+Oleiros
+TravelTime: 120;TravelDist: 1.8829999999999956;Vel.Media: 56.48999999999987
+Paredes
+TravelTime: 150;TravelDist: 3.8160000000000025;Vel.Media: 91.58400000000006
+Penafiel
+TravelTime: 150;TravelDist: 2.2409999999999997;Vel.Media: 53.78399999999999
+Bustelo
+TravelTime: 150;TravelDist: 2.058799999999998;Vel.Media: 49.41119999999995
+Meinedo
+TravelTime: 240;TravelDist: 3.0244;Vel.Media: 45.366
+Caide
