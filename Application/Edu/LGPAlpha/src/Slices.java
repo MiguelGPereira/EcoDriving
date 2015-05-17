@@ -199,4 +199,130 @@ public class Slices {
     public double getTime() {
         return slices.get(numSlices-1).getEndTime();
     }
+    
+    public void fuse() {
+        if (numKeepSlices<2)
+            return;
+        
+        // Separate the slices by the different speed limits along the service
+        ArrayList<ArrayList<Slice> > arrSpeedLimits = new ArrayList<ArrayList<Slice> >();
+        arrSpeedLimits.add(new ArrayList<Slice>());        
+        double speedLimit = keepSlices.get(0).getSpeedLimit();
+        int speedArr = 0;
+        arrSpeedLimits.get(speedArr).add(keepSlices.get(0));
+        for (int i=1; i<numKeepSlices; i++) {
+            if (keepSlices.get(i).getSpeedLimit()==speedLimit) {
+                arrSpeedLimits.get(speedArr).add(keepSlices.get(i));
+            } else {
+                speedArr++;
+                speedLimit = keepSlices.get(i).getSpeedLimit();
+                arrSpeedLimits.add(new ArrayList<Slice>());       
+                arrSpeedLimits.get(speedArr).add(keepSlices.get(i));
+            }
+        }
+        
+        // Print
+        /*for (int i=0; i<arrSpeedLimits.size(); i++) {
+            System.out.println("i:"+i);
+            for (int j=0; j<arrSpeedLimits.get(i).size(); j++) {
+                System.out.print("i:"+i+" j:"+j+" ");
+                arrSpeedLimits.get(i).get(j).printSimple();
+            }
+        }*/
+        
+        ArrayList<ArrayList<ArrayList<Slice> > > arrGradients = new ArrayList<ArrayList<ArrayList<Slice> > >();
+        int numSpeedLimits = arrSpeedLimits.size();
+        for (int i=0; i<numSpeedLimits; i++) {
+            arrGradients.add(new ArrayList<ArrayList<Slice> >());
+            arrGradients.get(i).add(new ArrayList<Slice>());
+            arrGradients.get(i).get(0).add(arrSpeedLimits.get(i).get(0));
+            
+            int arrSize = arrSpeedLimits.get(i).size();
+            if (arrSize<2) // Nothing to fuse in this speed limit array since there is only 1 slice
+                continue;
+            
+            double highestGradient = arrSpeedLimits.get(i).get(0).getGradient();
+            double lowestGradient = highestGradient;
+            
+            int gradientNumber = 0;
+            for (int j=1; j<arrSize; j++) {
+                double sliceGradient = arrSpeedLimits.get(i).get(j).getGradient();
+                if (Math.abs(sliceGradient-highestGradient)>2 || Math.abs(sliceGradient-lowestGradient)>2) {
+                    gradientNumber++;
+                    arrGradients.get(i).add(new ArrayList<Slice>());
+                    arrGradients.get(i).get(gradientNumber).add(arrSpeedLimits.get(i).get(j));
+                    highestGradient = arrSpeedLimits.get(i).get(j).getGradient();
+                    lowestGradient = highestGradient;
+                    continue;
+                }
+                
+                if (sliceGradient > highestGradient)
+                    highestGradient = sliceGradient;
+                if (sliceGradient < lowestGradient)
+                    lowestGradient = sliceGradient;
+                
+                arrGradients.get(i).get(gradientNumber).add(arrSpeedLimits.get(i).get(j));
+            }
+        }
+        
+        // Print
+        /*System.out.println("\n\n///////////////////////////////////////////////////////////\n\n");
+        for (int i=0; i<arrGradients.size(); i++) {
+            System.out.println("i:"+i);
+            for (int j=0; j<arrGradients.get(i).size(); j++) {
+                System.out.println("i:"+i+" j:"+j);
+                for (int k=0; k<arrGradients.get(i).get(j).size(); k++) {
+                    System.out.print("i:"+i+" j:"+j+" k:"+k+" ");
+                    arrGradients.get(i).get(j).get(k).printSimple();
+                }
+            }
+        }*/
+        
+        ArrayList<Slice> arrNew = new ArrayList<Slice>();
+        int numGradients = arrGradients.size();
+        for (int i=0; i<numGradients; i++) {
+            
+            int numGradientsi = arrGradients.get(i).size();
+            for (int j=0; j<numGradientsi; j++) {
+                int arrSize = arrGradients.get(i).get(j).size();
+                if (arrSize<2) {
+                    arrNew.add(arrGradients.get(i).get(j).get(0));
+                    continue;
+                }
+                
+                double startPointKm = arrGradients.get(i).get(j).get(0).getStartPointKm();
+                double endPointKm = arrGradients.get(i).get(j).get(arrSize-1).getEndPointKm();
+                double distanceKm = endPointKm-startPointKm;
+                double averageGradient = 0;
+                
+                for (int k=0; k<arrSize; k++) {
+                    double sliceDistanceKm = arrGradients.get(i).get(j).get(k).getDistanceKm();
+                    double sliceGradient = arrGradients.get(i).get(j).get(k).getGradient();
+                    averageGradient = averageGradient + ((sliceDistanceKm/distanceKm)*sliceGradient);
+                }
+                
+                arrNew.add(new Slice(startPointKm, endPointKm, averageGradient, arrGradients.get(i).get(j).get(0).getSpeedLimit(), false));
+            }
+        }
+        
+        // Print
+        /*System.out.println("\n\n///////////////////////////////////////////////////////////\n\n");
+        for (int i=0; i<arrNew.size(); i++) {
+            System.out.print("i:"+i+" ");
+            arrNew.get(i).printSimple();
+        }*/
+        
+        this.slices = new ArrayList<Slice>();
+        this.backupSlices = new ArrayList<Slice>();
+        this.keepSlices = arrNew;
+        numKeepSlices = keepSlices.size();
+        numSlices = 0;
+
+        for (int i=0; i<numKeepSlices; i++)
+            backupSlices.add(arrNew.get(i).clone());
+        
+        
+        
+        
+    }
 }

@@ -235,6 +235,20 @@ public final class Slice implements Comparable<Slice> {
         System.out.print("\n\n");
     }
     
+    public void printSimple() {
+        System.out.print("Type: ");
+        if (type)
+            System.out.print("Acceleration");
+        else
+            System.out.print("Keep        ");
+        
+        Print.printDouble(startPointKm, "  Start Point (km)");
+        Print.printDouble(endPointKm, "  End Point (km)");
+        Print.printDouble(gradient, "  Gradient (‰)");
+        Print.printInt(speedLimit, "  Speed Limit (km/h)");
+        System.out.print("\n");
+    }
+    
     public double getHighestSpeed() {
         return Math.max(startSpeedKmh, endSpeedKmh);
     }
@@ -257,6 +271,10 @@ public final class Slice implements Comparable<Slice> {
 
     public double getDistance() {
         return distance;
+    }
+
+    public double getDistanceKm() {
+        return (endPointKm-startPointKm);
     }
 
     public double getStartTime() {
