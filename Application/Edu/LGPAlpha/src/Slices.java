@@ -130,8 +130,6 @@ public class Slices {
         double currentTime = getTime();
         ArrayList<Slice> orderedSlices = orderSlicesByGradient();
          
-        
-        
         /*System.out.println("XSlices:");
         for (int i=0; i<numKeepSlices; i++)
             orderedSlices.get(i).print();*/
@@ -147,12 +145,13 @@ public class Slices {
             //orderedSlices.get(0).decrementSpeed();
             calculate();
             currentTime = getTime();
-            System.out.println("Current time: " + currentTime);
-            print();
+            /*System.out.println("Current time: " + currentTime);
+            print();*/
         }
         
         slices = lastSlices;
         currentTime = getTime();
+        System.out.println("Time available: " + time);
         System.out.println("Best time: " + currentTime);
         print();
     }
@@ -198,6 +197,10 @@ public class Slices {
 
     public double getTime() {
         return slices.get(numSlices-1).getEndTime();
+    }
+
+    public ArrayList<Slice> getKeepSlices() {
+        return keepSlices;
     }
     
     public void fuse() {
@@ -320,9 +323,26 @@ public class Slices {
 
         for (int i=0; i<numKeepSlices; i++)
             backupSlices.add(arrNew.get(i).clone());
-        
-        
-        
-        
+    }
+
+    public void exportResult() {
+        double startPointKm = slices.get(0).getStartPointKm();
+        double endPointKm = slices.get(0).getEndPointKm();
+        Double endSpeedKmh = slices.get(0).getEndSpeedKmh();
+        for (int i=1; i<numSlices; i++) {
+            //slices.get(i).exportResult();
+            double sliceStartPointKm = slices.get(i).getStartPointKm();
+            double sliceEndPointKm = slices.get(i).getEndPointKm();
+            double sliceEndSpeedKmh = slices.get(i).getEndSpeedKmh();
+            if (endSpeedKmh!=sliceEndSpeedKmh) {
+                System.out.printf("%.4f\t%.4f\t%.1f\n", startPointKm, endPointKm, endSpeedKmh);
+                startPointKm = sliceStartPointKm;
+                endPointKm = sliceEndPointKm;
+                endSpeedKmh = sliceEndSpeedKmh;
+            } else {
+                endPointKm = sliceEndPointKm;
+            }
+        }
+        System.out.printf("%.4f\t%.4f\t%d\n\n", startPointKm, endPointKm, endSpeedKmh.intValue());
     }
 }

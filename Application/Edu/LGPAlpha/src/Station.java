@@ -1,18 +1,15 @@
-/**
- * Created by Sergio Esteves on 5/17/2015.
- */
 public class Station {
     protected String stationName; // m
-    protected int timeArrival; //chegada s
-    protected int timeDeparture; //partida s
-    protected double PK;
+    protected int timeArrival; // s
+    protected int timeDeparture; // s
+    protected double pk;
 
-    public Station(String stationName, String timeArrival, String timeDeparture, String PK)
+    public Station(String stationName, String timeArrival, String timeDeparture, String pk)
     {
         this.stationName = stationName;
         this.timeArrival = Integer.parseInt(timeArrival);
         this.timeDeparture = Integer.parseInt(timeDeparture);
-        this.PK = Double.parseDouble(PK);
+        this.pk = Double.parseDouble(pk);
     }
 
     public int getTimeArrival() {
@@ -39,8 +36,11 @@ public class Station {
         this.stationName = stationName;
     }
 
-    public void print()
-    {
-        System.out.println(stationName+ " " + timeArrival + " " + timeDeparture + " " + PK);
+    double getPK() {
+        return pk;
+    }
+
+    public void print() {
+        System.out.println("Station: " + stationName+ " Arrival: " + timeArrival + " Departure: " + timeDeparture + " PK: " + pk);
     }
 }

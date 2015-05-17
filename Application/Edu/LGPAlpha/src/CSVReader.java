@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
  
 public class CSVReader { 
-    public static ArrayList<Slice> extract(String csvFile) {
+    public static ArrayList<Slice> extractSlices(String csvFile) {
         BufferedReader br = null;
         String line = "", csvSplitBy = "\\t";
         ArrayList<Slice> slices = new ArrayList<Slice> ();
@@ -15,7 +15,6 @@ public class CSVReader {
                 line = line.replaceAll(",",".");
                 String[] slicesStr = line.split(csvSplitBy);
                 Slice slice = new Slice(slicesStr[0], slicesStr[1], slicesStr[2], slicesStr[3]);
-                //slice.print();
                 slices.add(slice);
             }
         } catch (FileNotFoundException e) {
@@ -34,21 +33,16 @@ public class CSVReader {
         return slices;
     }
 
-    public static ArrayList<Station> extractStations(String csvFileTimes)
-    {
+    public static ArrayList<Station> extractStations(String csvFile) {
         BufferedReader br = null;
-
-        String line = "",  csvSplitBy = ";";
+        String line = "", csvSplitBy = "\\t";
         ArrayList<Station> stations = new ArrayList<Station> ();
-
         try {
-            br = new BufferedReader(new FileReader(csvFileTimes));
-
+            br = new BufferedReader(new FileReader(csvFile));
             while ((line = br.readLine()) != null) {
                 line = line.replaceAll(",",".");
                 String[] stationsStr = line.split(csvSplitBy);
                 Station station = new Station(stationsStr[0], stationsStr[1], stationsStr[2], stationsStr[3]);
-                //station.print();
                 stations.add(station);
             }
         } catch (FileNotFoundException e) {
@@ -56,15 +50,13 @@ public class CSVReader {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if (br != null ) {
+            if (br != null) {
                 try {
                     br.close();
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
-
         }
         return stations;
     }

@@ -300,4 +300,9 @@ public final class Slice implements Comparable<Slice> {
     public boolean isKeep() {
         return !type;
     }
+
+    public void exportResult() {
+        System.out.printf("%.4f\t%.4f\t", startPointKm, endPointKm);
+        System.out.println(endSpeedKmh);
+    }
 }
