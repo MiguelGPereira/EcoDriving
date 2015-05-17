@@ -33,4 +33,39 @@ public class CSVReader {
         }
         return slices;
     }
+
+    public static ArrayList<Station> extractStations(String csvFileTimes)
+    {
+        BufferedReader br = null;
+
+        String line = "",  csvSplitBy = ";";
+        ArrayList<Station> stations = new ArrayList<Station> ();
+
+        try {
+            br = new BufferedReader(new FileReader(csvFileTimes));
+
+            while ((line = br.readLine()) != null) {
+                line = line.replaceAll(",",".");
+                String[] stationsStr = line.split(csvSplitBy);
+                Station station = new Station(stationsStr[0], stationsStr[1], stationsStr[2], stationsStr[3]);
+                //station.print();
+                stations.add(station);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null ) {
+                try {
+                    br.close();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+        return stations;
+    }
 }
