@@ -12,10 +12,10 @@ public class Print {
         System.out.printf("%.4f", num);
     }
     
-    public static void exportResult(ArrayList<Slices> trips) {
+    public static void exportResult(ArrayList<Slices> trips, ArrayList<Station> stations) {
         int numTrips = trips.size();
         for (int i=0; i<numTrips; i++) {
-            trips.get(i).exportResult();
+            trips.get(i).exportResult(stations.get(i).getStationName(), stations.get(i+1).getStationName());
         }
     }
 }

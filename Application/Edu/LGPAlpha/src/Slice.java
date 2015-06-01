@@ -11,9 +11,53 @@ public final class Slice implements Comparable<Slice> {
     protected double startSpeedKmh, endSpeedKmh; // km/h
     protected double timeNeeded; // s (Keep: Distance to time; Acceleration: Distance to accelerate)
     
-    final protected double acceleration = 1; // m/s²
-    final protected int minimumSpeedKmh = 30; // km/h
+    final protected static double acceleration = 1; // m/s²
+    final protected static double accelerationKmh2 = Conversion.ms2ToKmh2(acceleration);
+    final protected int minimumSpeedKmh = 0; // km/h
     final protected int maximumSpeedKmh = 140; // km/h
+    
+    protected int invades;
+    
+    public double maxPossibleSpeedKmh(double distanceKm) {
+        if (invadesNext()) {
+            return Math.sqrt((startSpeedKmh*startSpeedKmh)+(2*accelerationKmh2*distanceKm)); // vf = sqrt(vi^2+2ad)
+        } else if (invadesPrevious()) {
+            return Math.sqrt((endSpeedKmh*endSpeedKmh)-(2*accelerationKmh2*distanceKm)); // vi = sqrt(vf^2-2ad)
+        }
+        return Conversion.kmhToMs(averageSpeed);
+    }
+    
+    public boolean isAccelerating() {
+        return (endSpeedKmh>startSpeedKmh);
+    }
+    
+    public boolean isBraking() {
+        return (endSpeedKmh<startSpeedKmh);
+    }
+    
+    public boolean invadesNext() {
+        return (invades==1);
+    }
+    
+    public boolean invadesPrevious() {
+        return (invades==-1);
+    }
+    
+    public int getInvades() {
+        return invades;
+    }
+    
+    public void setInvadesNext() {
+        invades = 1;
+    }
+    
+    public void setInvadesPrevious() {
+        invades = -1;
+    }
+    
+    public static double getAcceleration() {
+        return acceleration;
+    }
 
     public void resetExceptSpeeds() {
         startPointKm = originalStartPointKm;
@@ -98,6 +142,7 @@ public final class Slice implements Comparable<Slice> {
     }
     
     protected void startAuxiliaryVariables() {
+        invades = 0;
         startPoint = startPointKm*1000;
         endPoint = endPointKm*1000;
         distance = endPoint - startPoint;
@@ -212,6 +257,16 @@ public final class Slice implements Comparable<Slice> {
         else
             System.out.print("Keep        ");
         
+        if (invades==1)
+            System.out.print("Invades Next");
+        else if (invades==-1)
+            System.out.print("Invades Previous");
+        
+        Print.printDouble(originalStartPointKm, "  Original Start Point (km)");
+        Print.printDouble(originalEndPointKm, "  Original End Point (km)");
+        
+            
+        
         Print.printDouble(startPointKm, "  Start Point (km)");
         Print.printDouble(endPointKm, "  End Point (km)");
         Print.printDouble(gradient, "  Gradient (‰)");
@@ -292,6 +347,14 @@ public final class Slice implements Comparable<Slice> {
     public double getEndSpeedKmh() {
         return endSpeedKmh;
     }
+
+    public double getOriginalStartPointKm() {
+        return originalStartPointKm;
+    }
+
+    public double getOriginalEndPointKm() {
+        return originalEndPointKm;
+    }
     
     public boolean isAcceleration() {
         return type;
@@ -302,7 +365,48 @@ public final class Slice implements Comparable<Slice> {
     }
 
     public void exportResult() {
-        System.out.printf("%.4f\t%.4f\t", startPointKm, endPointKm);
-        System.out.println(endSpeedKmh);
+        if (type) {
+            double startPointAux = startPoint;
+            if (startSpeedKmh<endSpeedKmh) { // ACCELERATING
+                for(double i=startSpeedKmh; i<endSpeedKmh; i=i+5) {
+                    double speedDifference = Math.min(endSpeedKmh-i,5);
+                    double timeNeededAux = Conversion.kmhToMs(speedDifference) / acceleration;
+                    double averageSpeedAux = (Conversion.kmhToMs(i)+Conversion.kmhToMs(i+speedDifference))/2;
+                    double distanceAux = timeNeededAux * averageSpeedAux;
+                    System.out.printf("%.4f\t%.4f\t%.0f\t%d\t\n", (startPointAux/1000), ((startPointAux+distanceAux)/1000), i+speedDifference, speedLimit);
+                    startPointAux = startPointAux + distanceAux;
+                }
+            } else { // BRAKING
+                for(double i=startSpeedKmh; i>endSpeedKmh; i=i-5) {
+                    double speedDifference = Math.min(i-endSpeedKmh,5);
+                    double timeNeededAux = Conversion.kmhToMs(speedDifference) / acceleration;
+                    double averageSpeedAux = (Conversion.kmhToMs(i)+Conversion.kmhToMs(i-speedDifference))/2;
+                    double distanceAux = timeNeededAux * averageSpeedAux;
+                    System.out.printf("%.4f\t%.4f\t%.0f\t%d\t\n", (startPointAux/1000), ((startPointAux+distanceAux)/1000), i-speedDifference, speedLimit);
+                    startPointAux = startPointAux + distanceAux;
+                }
+            }
+            /* 1 em 1 km/h
+            double startPointAux = startPoint;
+            if (startSpeedKmh<endSpeedKmh) { // ACCELERATING
+                for(double i=startSpeedKmh; i<endSpeedKmh; i++) {
+                    double timeNeededAux = Conversion.kmhToMs(1) / acceleration;
+                    double averageSpeedAux = (Conversion.kmhToMs(i)+Conversion.kmhToMs(i+1))/2;
+                    double distanceAux = timeNeededAux * averageSpeedAux;
+                    System.out.printf("%.4f\t%.4f\t%.0f\t\n", (startPointAux/1000), ((startPointAux+distanceAux)/1000), i+1);
+                    startPointAux = startPointAux + distanceAux;
+                }
+            } else { // BRAKING
+                for(double i=startSpeedKmh; i>endSpeedKmh; i--) {
+                    double timeNeededAux = Conversion.kmhToMs(1) / acceleration;
+                    double averageSpeedAux = (Conversion.kmhToMs(i)+Conversion.kmhToMs(i-1))/2;
+                    double distanceAux = timeNeededAux * averageSpeedAux;
+                    System.out.printf("%.4f\t%.4f\t%.0f\t\n", (startPointAux/1000), ((startPointAux+distanceAux)/1000), i-1);
+                    startPointAux = startPointAux + distanceAux;
+                }
+            }*/
+        } else {
+            System.out.printf("%.4f\t%.4f\t%.0f\t%d\t\n", startPointKm, endPointKm, endSpeedKmh, speedLimit);
+        }
     }
 }

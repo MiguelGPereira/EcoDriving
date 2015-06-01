@@ -15,7 +15,8 @@ public class SocketClient {
         Socket smtpSocket = null; // smtpClient: our client socket
 
         try {
-            InetAddress thisIp = InetAddress.getByName("nomadtech.serveftp.com");
+            //InetAddress thisIp = InetAddress.getByName("nomadtech.serveftp.com");
+            InetAddress thisIp = InetAddress.getByName("94.132.233.106");
             System.out.println(thisIp.getHostAddress());
             smtpSocket = new Socket( thisIp, 5000);
             os = new DataOutputStream(smtpSocket.getOutputStream());
@@ -33,8 +34,8 @@ public class SocketClient {
                 String responseLine;
                 while ((responseLine = is.readLine()) != null) {
                     System.out.println(responseLine);
-                    LogLine logLine = new LogLine(responseLine);
-                    logLine.print();
+                    //LogLine logLine = new LogLine(responseLine);
+                    //logLine.print();
                 }
                 os.close();
                 is.close();

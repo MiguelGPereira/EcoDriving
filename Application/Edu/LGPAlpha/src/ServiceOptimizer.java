@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class ServiceOptimizer {
     
-    protected static String slicesFilePath = "C:\\Users\\eduardextreme\\NetBeansWorkspace\\LGPAlpha\\build\\classes\\slicesComplete.csv";
+    protected static String slicesFilePath = "C:\\Users\\eduardextreme\\NetBeansWorkspace\\LGPAlpha\\build\\classes\\slicesOnlySpeedLimits.csv";
     protected static String stationsFilePath = "C:\\Users\\eduardextreme\\NetBeansWorkspace\\LGPAlpha\\build\\classes\\stations.csv";
  
     public static void main(String[] args)
@@ -34,7 +34,7 @@ public class ServiceOptimizer {
             trips.get(i).enforceTime(targetTime);
         }
         
-        Print.exportResult(trips);
+        Print.exportResult(trips, stations);
     }
     
     public static ArrayList<ArrayList<Slice> > slicer(Slices slicesObj, ArrayList<Station> stations) {

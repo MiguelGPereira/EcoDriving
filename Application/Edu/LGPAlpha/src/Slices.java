@@ -36,6 +36,72 @@ public class Slices {
     }
 
     public void calculate() {
+        calculateAux();
+        
+        /*boolean wasCorrected = true;
+        while (wasCorrected) {
+            wasCorrected = false;
+            
+            for (int i=0; i<numSlices; i++) {
+                if (slices.get(i).isKeep()) {
+                    if (slices.get(i).getDistance()<0) {
+                        slices.get(i).print();
+                        if (slices.get(i-1).invadesNext()) {
+                            if (slices.get(i+1).invadesPrevious()) {
+                                System.out.println("Is invaded by both acceleration slices (Prev:"+slices.get(i-1).getDistanceKm()+") (Next:"+slices.get(i+1).getDistanceKm()+")");
+                            } else {
+                                System.out.println("Is invaded by previous acceleration slice ("+slices.get(i-1).getDistanceKm()+")");
+                            }
+                        } else if (slices.get(i+1).invadesPrevious()) {
+                            System.out.println("Is invaded by next acceleration slice ("+slices.get(i+1).getDistanceKm()+")");
+                        }
+                        
+                        double originalDistanceKm = slices.get(i).getOriginalEndPointKm() - slices.get(i).getOriginalStartPointKm();
+                        double accelerationKmh2 = Conversion.ms2ToKmh2(Slice.getAcceleration());
+                        double startSpeedKmh = slices.get(i).getStartSpeedKmh();
+                        //double correctSpeedKmh = Math.floor(Math.sqrt((2*accelerationKmh2*originalDistanceKm)+(startSpeedKmh*startSpeedKmh)));
+                        System.out.println("Distancia:"+originalDistanceKm);
+                        System.out.println("Start:"+slices.get(i).getOriginalStartPointKm());
+                        System.out.println("End:"+slices.get(i).getOriginalEndPointKm());
+                        //System.out.println("Correct Speed:"+correctSpeedKmh);
+                        
+                        double previousSliceStartSpeedKmh = slices.get(i-1).getStartSpeedKmh();
+                        double nextSliceEndSpeedKmh = slices.get(i+1).getEndSpeedKmh();
+                        double intersectionSpeedKmh = Math.sqrt(((originalDistanceKm*2*accelerationKmh2)+(previousSliceStartSpeedKmh*previousSliceStartSpeedKmh)+(nextSliceEndSpeedKmh*nextSliceEndSpeedKmh))/2);
+                        
+                        System.out.println("Previous Slice Start Speed Kmh:"+previousSliceStartSpeedKmh);
+                        System.out.println("This Slice Speed Kmh:"+slices.get(i).getEndSpeedKmh()+"="+slices.get(i).getStartSpeedKmh());
+                        System.out.println("Next Slice End Speed Kmh:"+nextSliceEndSpeedKmh);
+                        System.out.println("Intersection Speed Kmh:"+intersectionSpeedKmh);
+                        
+                        double maxPossibleSpeedPrevKmh = slices.get(i-1).maxPossibleSpeedKmh(originalDistanceKm);
+                        double maxPossibleSpeedNextKmh = slices.get(i+1).maxPossibleSpeedKmh(originalDistanceKm);
+                        System.out.println("Max Possible Speed Prev Kmh:"+maxPossibleSpeedPrevKmh);
+                        System.out.println("Max Possible Speed Next Kmh:"+maxPossibleSpeedNextKmh);
+                        
+                        //correctSpeedKmh = 30;
+                        slices.get(i).setSpeed(Math.min(maxPossibleSpeedPrevKmh, maxPossibleSpeedNextKmh));
+                        wasCorrected = true;
+                    }
+                }
+            }
+
+            if (wasCorrected) {
+                System.out.println("RECALCULANDO");
+                resetSlicesExceptSpeeds();
+                addAccelerationSlices();
+                calculateAux();
+            } 
+        }*/
+        
+        // Calculate times
+        for (int i=1; i<numSlices; i++) {
+            slices.get(i).editStartTime(slices.get(i - 1).getEndTime());
+        }
+        
+    }
+    
+    protected void calculateAux() {
         // Calculate Speeds
         for (int i=0; i<numSlices; i++) {
             if (slices.get(i).isAcceleration()) {
@@ -57,7 +123,10 @@ public class Slices {
                 
                 if (slices.get(i).getDistance() <= 0) {
                     // Useless slice since there is no speed difference, therefore, no acceleration
-                    slices.get(i).changeStartPointKm(slices.get(i+1).getStartPointKm());
+                    if ((i+1)<numSlices)
+                        slices.get(i).changeStartPointKm(slices.get(i+1).getStartPointKm());
+                    else
+                        slices.get(i).changeStartPointKm(slices.get(i-1).getEndPointKm());
                     slices.get(i).changeEndPointKm(slices.get(i-1).getEndPointKm());
                     continue;
                 }
@@ -65,49 +134,51 @@ public class Slices {
                 if (i == 0) {
                     // First slice, therefore, it will be on the start of the next (keep) slice
                     putSliceInStartOfNextSlice(slices.get(i), slices.get(i+1));
+                    slices.get(i).setInvadesNext();
                     continue;
                 } else if (i == (numSlices-1)) {
                     // Last slice, therefore, it will be on the end of the previous (keep) slice
                     putSliceInEndOfPreviousSlice(slices.get(i), slices.get(i-1));
+                    slices.get(i).setInvadesPrevious();
                     continue;
                 }
                 
                 if (slices.get(i-1).getSpeedLimit() < slices.get(i).getHighestSpeed()) {
                     // The previous slice has a speed limit lower than the highest speed on this acceleration, put this slice in the start of the next (keep) slice
                     putSliceInStartOfNextSlice(slices.get(i), slices.get(i+1));
+                    slices.get(i).setInvadesNext();
                     continue;
                 } else if (slices.get(i+1).getSpeedLimit() < slices.get(i).getHighestSpeed()) {
                     // The next slice has a speed limit lower than the highest speed on this acceleration, put this slice in the end of the previous (keep) slice
                     putSliceInEndOfPreviousSlice(slices.get(i), slices.get(i-1));
+                    slices.get(i).setInvadesPrevious();
                     continue;
                 }
                 
                 if (slices.get(i-1).getGradient() < slices.get(i+1).getGradient()) {
                     // The previous slice has a inferior gradient, making it more efficient to accelerate or break (?), put this slice in the end of the previous (keep) slice
                     putSliceInEndOfPreviousSlice(slices.get(i), slices.get(i-1));
+                    slices.get(i).setInvadesPrevious();
                     continue;
                 } else if (slices.get(i-1).getGradient() > slices.get(i+1).getGradient()) {
                     // The next slice has a inferior gradient, making it more efficient to accelerate or break (?), put this slice in the start of the next (keep) slice
                     putSliceInStartOfNextSlice(slices.get(i), slices.get(i+1));
+                    slices.get(i).setInvadesNext();
                     continue;
                 }
                 
                 // Where it has more space without giving a not enough distance error, therefore, tries to put it on the previous first
                 if (slices.get(i-1).getDistance() >= slices.get(i).getDistance()) {
                     putSliceInEndOfPreviousSlice(slices.get(i), slices.get(i-1));
+                    slices.get(i).setInvadesPrevious();
                     continue;
                 } else {
                     putSliceInStartOfNextSlice(slices.get(i), slices.get(i+1));
+                    slices.get(i).setInvadesNext();
                     continue;
                 }
             }
         }
-        
-        // Calculate times
-        for (int i=1; i<numSlices; i++) {
-            slices.get(i).editStartTime(slices.get(i - 1).getEndTime());
-        }
-        
     }
     
     protected void putSliceInStartOfNextSlice(Slice accSlice, Slice keepSlice) {
@@ -325,8 +396,13 @@ public class Slices {
             backupSlices.add(arrNew.get(i).clone());
     }
 
-    public void exportResult() {
-        double startPointKm = slices.get(0).getStartPointKm();
+    public void exportResult(String startStation, String endStation) {
+        System.out.println("STATION\t" + startStation + "\t" + endStation);
+        for (int i=0; i<numSlices; i++) {
+            slices.get(i).exportResult();
+        }
+        
+        /*double startPointKm = slices.get(0).getStartPointKm();
         double endPointKm = slices.get(0).getEndPointKm();
         Double endSpeedKmh = slices.get(0).getEndSpeedKmh();
         for (int i=1; i<numSlices; i++) {
@@ -343,6 +419,6 @@ public class Slices {
                 endPointKm = sliceEndPointKm;
             }
         }
-        System.out.printf("%.4f\t%.4f\t%d\n\n", startPointKm, endPointKm, endSpeedKmh.intValue());
+        System.out.printf("%.4f\t%.4f\t%d\n\n", startPointKm, endPointKm, endSpeedKmh.intValue());*/
     }
 }
