@@ -15,7 +15,8 @@ public class Print {
     public static void exportResult(ArrayList<Slices> trips, ArrayList<Station> stations) {
         int numTrips = trips.size();
         for (int i=0; i<numTrips; i++) {
-            trips.get(i).exportResult(stations.get(i).getStationName(), stations.get(i+1).getStationName());
+            int time = stations.get(i+1).getTimeArrival() - stations.get(i).getTimeDeparture();
+            trips.get(i).exportResult(stations.get(i).getStationName(), stations.get(i+1).getStationName(), time);
         }
     }
 }

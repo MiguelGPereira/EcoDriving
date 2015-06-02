@@ -396,8 +396,8 @@ public class Slices {
             backupSlices.add(arrNew.get(i).clone());
     }
 
-    public void exportResult(String startStation, String endStation) {
-        System.out.println("STATION\t" + startStation + "\t" + endStation);
+    public void exportResult(String startStation, String endStation, int time) {
+        System.out.println("STATION\t" + startStation + "\t" + endStation + "\t" + time);
         for (int i=0; i<numSlices; i++) {
             slices.get(i).exportResult();
         }
